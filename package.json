@@ -11,11 +11,8 @@
   "license": "ISC",
   "description": "",
   "dependencies": {
+    "cors": "^2.8.5",
     "express": "^5.1.0",
     "mongoose": "^8.14.3"
-  },
-  "engines": {
-    "node": "18.x"
   }
 }
-
