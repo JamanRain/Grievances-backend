@@ -12,3 +12,5 @@ router.delete('/:id', grievanceController.deleteGrievance);
 
 module.exports = router;
 
+
+
