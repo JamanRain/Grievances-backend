@@ -1,7 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const messageController = require('../controllers/messageController');
-const Message = require('../models/messageModel');
+const Message = require('../models/Message');
 
 // POST: Send a new message
 router.post('/send', messageController.sendMessage);
