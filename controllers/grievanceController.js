@@ -43,4 +43,3 @@ exports.deleteGrievance = async (req, res) => {
     res.status(500).json({ message: 'Error deleting grievance', error });
   }
 };
-
