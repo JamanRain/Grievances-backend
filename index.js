@@ -14,14 +14,24 @@ connectDB();
 const allowedOrigins = [
   'https://grievances-frontend.vercel.app',
   'http://localhost:3000',
-  'http://localhost:3001' // 👈 Added to fix your CORS issue
+  'http://localhost:3001'
 ];
 
 app.use(cors({
-  origin: '*', // or replace with exact frontend domain if security needed
-  methods: ['GET', 'POST'],
-  allowedHeaders: ['Content-Type']
+  origin: function (origin, callback) {
+    // Allow requests with no origin (like Postman) or allowed origins
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'], // ✅ Include DELETE
+  allowedHeaders: ['Content-Type', 'Authorization']
 }));
+
+// ✅ Handle preflight requests
+app.options('*', cors());
 
 // ✅ Middleware
 app.use(express.json());
@@ -40,3 +50,4 @@ const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
