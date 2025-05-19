@@ -6,7 +6,7 @@ const Message = require('../models/Message');
 // POST: Send a new message
 router.post('/send', messageController.sendMessage);
 
-// ✅ New route to match frontend: /api/messages?sender=...&receiver=...
+// New route to match frontend: /api/messages?sender=...&receiver=...
 router.get('/', async (req, res) => {
   const { sender, receiver } = req.query;
 
@@ -28,4 +28,5 @@ router.get('/', async (req, res) => {
 router.get('/history', messageController.getMessages);
 
 module.exports = router;
+
 
