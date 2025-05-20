@@ -21,6 +21,17 @@ exports.getAllGrievances = async (req, res) => {
   }
 };
 
+// ✅ Get grievances FOR a specific user (e.g., for Raman or Mimansa)
+exports.getGrievancesFor = async (req, res) => {
+  try {
+    const { recipient } = req.params;
+    const grievances = await Grievance.find({ recipient });
+    res.status(200).json(grievances);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+};
+
 // Respond to grievance
 exports.respondToGrievance = async (req, res) => {
   try {
@@ -33,7 +44,7 @@ exports.respondToGrievance = async (req, res) => {
   }
 };
 
-// ✅ Delete grievance (moved outside)
+// Delete grievance
 exports.deleteGrievance = async (req, res) => {
   try {
     const { id } = req.params;
@@ -43,4 +54,5 @@ exports.deleteGrievance = async (req, res) => {
     res.status(500).json({ message: 'Error deleting grievance', error });
   }
 };
+
 
