@@ -2,7 +2,9 @@ require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
+
 const grievanceRoutes = require('./routes/grievanceRoutes');
+const authRoutes = require('./routes/authRoutes'); // ✅ Add this
 
 const app = express();
 
@@ -14,7 +16,6 @@ const allowedOrigins = [
 
 app.use(cors({
   origin: function (origin, callback) {
-    // allow requests with no origin like mobile apps or curl
     if (!origin || allowedOrigins.includes(origin)) {
       callback(null, true);
     } else {
@@ -33,6 +34,7 @@ app.get('/', (req, res) => {
 
 // ✅ API Routes
 app.use('/api/grievances', grievanceRoutes);
+app.use('/api/auth', authRoutes); // ✅ Add this
 
 // ✅ Connect to MongoDB
 mongoose.connect(process.env.MONGO_URI, {
