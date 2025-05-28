@@ -1,17 +1,48 @@
 const Grievance = require('../models/Grievance');
+const nodemailer = require('nodemailer');
 
-// Create grievance
+const transporter = nodemailer.createTransport({
+  service: 'gmail',
+  auth: {
+    user: process.env.EMAIL_USER,
+    pass: process.env.EMAIL_PASS,
+  },
+});
+
+const sendEmailNotification = async (sender, recipientEmail, grievanceText) => {
+  const mailOptions = {
+    from: `"Grievance Portal 💌" <${process.env.EMAIL_USER}>`,
+    to: recipientEmail,
+    subject: `📩 New grievance from ${sender}`,
+    html: `<p><strong>${sender}</strong> just posted a grievance for you:</p><p>💬 "${grievanceText}"</p><p>Visit the portal to view and respond. 💖</p>`,
+  };
+
+  try {
+    await transporter.sendMail(mailOptions);
+    console.log(`📧 Email sent to ${recipientEmail}`);
+  } catch (err) {
+    console.error('❌ Error sending email:', err.message);
+  }
+};
+
+// Create grievance with email notification
 exports.createGrievance = async (req, res) => {
   try {
     const grievance = new Grievance(req.body);
     await grievance.save();
+
+    const { sender, recipient, text } = req.body;
+    const recipientEmail = recipient === 'Mimansa' ? process.env.MIMANSA_EMAIL : process.env.RAMAN_EMAIL;
+
+    await sendEmailNotification(sender, recipientEmail, text);
+
     res.status(201).json(grievance);
   } catch (err) {
     res.status(500).json({ error: err.message });
   }
 };
 
-// Get all grievances
+// (Other functions remain unchanged)
 exports.getAllGrievances = async (req, res) => {
   try {
     const grievances = await Grievance.find();
@@ -21,7 +52,6 @@ exports.getAllGrievances = async (req, res) => {
   }
 };
 
-// ✅ Get grievances FOR a specific user (e.g., for Raman or Mimansa)
 exports.getGrievancesFor = async (req, res) => {
   try {
     const { recipient } = req.params;
@@ -32,7 +62,6 @@ exports.getGrievancesFor = async (req, res) => {
   }
 };
 
-// Respond to grievance
 exports.respondToGrievance = async (req, res) => {
   try {
     const { id } = req.params;
@@ -44,7 +73,6 @@ exports.respondToGrievance = async (req, res) => {
   }
 };
 
-// Delete grievance
 exports.deleteGrievance = async (req, res) => {
   try {
     const { id } = req.params;
@@ -54,5 +82,6 @@ exports.deleteGrievance = async (req, res) => {
     res.status(500).json({ message: 'Error deleting grievance', error });
   }
 };
+
 
 
