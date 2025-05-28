@@ -14,7 +14,7 @@ const sendEmailNotification = async (sender, recipientEmail, grievanceText) => {
     from: `"Grievance Portal 💌" <${process.env.EMAIL_USER}>`,
     to: recipientEmail,
     subject: `📩 New grievance from ${sender}`,
-    html: `<p><strong>${sender}</strong> just posted a grievance for you:</p><p>💬 "${grievanceText}"</p><p>Visit the portal to view and respond. 💖</p>`,
+    html: `<p>There is a grievance for you😋</p><p>💬 "${grievanceText}"</p><p>Visit the portal to view and respond. 💖</p>`,
   };
 
   try {
